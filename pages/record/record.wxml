@@ -1,0 +1,90 @@
+<!--record.wxml-->
+<view class="container">
+  <!-- 当前孕周显示 -->
+  <view class="pregnancy-info">
+    <view class="pregnancy-text">
+      当前孕周：{{pregnancyWeek}}周{{pregnancyDay}}天
+    </view>
+    <view class="date-text">
+      日期：{{selectedDate}}
+    </view>
+  </view>
+  
+  <!-- 体重输入 -->
+  <view class="input-section">
+    <view class="input-label">体重 (kg)</view>
+    <input 
+      class="weight-input" 
+      type="digit" 
+      placeholder="请输入体重" 
+      value="{{weight}}"
+      bindinput="onWeightInput"
+    />
+  </view>
+  
+  <!-- 身高输入 -->
+  <view class="input-section">
+    <view class="input-label">身高 (cm)</view>
+    <input 
+      class="height-input" 
+      type="digit" 
+      placeholder="请输入身高" 
+      value="{{height}}"
+      bindinput="onHeightInput"
+    />
+  </view>
+  
+  <!-- 孕前体重输入 -->
+  <view class="input-section">
+    <view class="input-label">孕前体重 (kg)</view>
+    <input 
+      class="pre-pregnancy-input" 
+      type="digit" 
+      placeholder="请输入孕前体重" 
+      value="{{prePregnancyWeight}}"
+      bindinput="onPrePregnancyWeightInput"
+    />
+  </view>
+  
+  <!-- 日期选择 -->
+  <view class="date-section">
+    <view class="date-label">记录日期</view>
+    <view class="date-options">
+      <view 
+        class="date-option {{!isCustomDate ? 'active' : ''}}"
+        bindtap="toggleDatePicker"
+      >
+        今天
+      </view>
+      <view 
+        class="date-option {{isCustomDate ? 'active' : ''}}"
+        bindtap="toggleDatePicker"
+      >
+        选择日期
+      </view>
+    </view>
+    
+    <view wx:if="{{showDatePicker}}" class="date-picker-section">
+      <picker 
+        mode="date" 
+        value="{{selectedDate}}"
+        bindchange="onDateChange"
+        class="date-picker"
+      >
+        <view class="date-picker-text">选择日期：{{selectedDate}}</view>
+      </picker>
+    </view>
+  </view>
+  
+  <!-- 保存按钮 -->
+  <view class="save-section">
+    <button class="save-button" bindtap="saveRecord">保存记录</button>
+  </view>
+  
+  <!-- 设置孕周起始日期 -->
+  <view class="settings-section">
+    <view class="settings-button" bindtap="setPregnancyStartDate">
+      设置孕周起始日期
+    </view>
+  </view>
+</view>

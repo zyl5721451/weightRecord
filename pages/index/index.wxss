@@ -1,0 +1,221 @@
+/**index.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.container {
+  padding: 40rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.pregnancy-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.pregnancy-title {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.pregnancy-week {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.week-number {
+  font-size: 80rpx;
+  font-weight: bold;
+  color: #3cc51f;
+}
+
+.week-unit {
+  font-size: 36rpx;
+  color: #666;
+  margin-left: 10rpx;
+  margin-right: 30rpx;
+}
+
+.day-number {
+  font-size: 60rpx;
+  font-weight: bold;
+  color: #3cc51f;
+}
+
+.day-unit {
+  font-size: 32rpx;
+  color: #666;
+  margin-left: 10rpx;
+}
+
+.weight-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.weight-title {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.weight-value {
+  font-size: 64rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.weight-value.has-record {
+  color: #3cc51f;
+}
+
+.weight-value.no-record {
+  color: #ff6b6b;
+}
+
+.weight-date {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* BMI样式 */
+.bmi-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.bmi-title {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.bmi-value {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #1890ff;
+  margin-bottom: 10rpx;
+}
+
+.bmi-status {
+  font-size: 28rpx;
+  margin-bottom: 10rpx;
+}
+
+.bmi-status.normal {
+  color: #3cc51f;
+}
+
+.bmi-status.underweight {
+  color: #ffa500;
+}
+
+.bmi-status.overweight {
+  color: #ff6b6b;
+}
+
+.bmi-status.obese {
+  color: #ff6b6b;
+}
+
+.bmi-stage {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 体重增加值样式 */
+.weight-gain-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.gain-title {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.gain-value {
+  font-size: 56rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.gain-value.normal {
+  color: #3cc51f;
+}
+
+.gain-value.overweight {
+  color: #ff6b6b;
+}
+
+.overweight-warning {
+  font-size: 24rpx;
+  margin-left: 15rpx;
+  background: #ff6b6b;
+  color: white;
+  padding: 5rpx 15rpx;
+  border-radius: 20rpx;
+}
+
+.gain-recommend {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.action-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40rpx;
+}
+
+.action-item {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  text-align: center;
+  flex: 1;
+  margin: 0 15rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 导入按钮特殊样式 */
+.action-item:last-child {
+  background: #f0f8ff;
+  border: 1px solid #1890ff;
+}
+
+.action-icon {
+  font-size: 60rpx;
+  margin-bottom: 15rpx;
+}
+
+.action-text {
+  font-size: 28rpx;
+  color: #666;
+}

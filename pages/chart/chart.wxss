@@ -1,0 +1,150 @@
+/**chart.wxss**/
+.container {
+  padding: 40rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.stats-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  display: flex;
+  justify-content: space-around;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+}
+
+.stats-item {
+  text-align: center;
+  flex: 1;
+}
+
+.stats-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #3cc51f;
+  margin-bottom: 8rpx;
+}
+
+.stats-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.chart-section {
+  background: white;
+  border-radius: 20rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  min-height: 400rpx;
+}
+
+.empty-state {
+  padding: 80rpx 40rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+}
+
+.empty-tip {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.chart-container {
+  padding: 30rpx;
+}
+
+.chart-canvas-wrapper {
+  position: relative;
+  touch-action: pan-x pinch-zoom;
+}
+
+.chart-canvas {
+  width: 100%;
+  height: 500rpx;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+  padding: 0 20rpx;
+}
+
+.zoom-btn {
+  background: #3cc51f;
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 15rpx 25rpx;
+  font-size: 24rpx;
+}
+
+.zoom-info {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.data-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.data-list {
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.data-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.data-item:last-child {
+  border-bottom: none;
+}
+
+.data-date {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.data-week {
+  flex: 1;
+  font-size: 26rpx;
+  color: #666;
+  text-align: center;
+}
+
+.data-weight {
+  flex: 1;
+  font-size: 28rpx;
+  color: #3cc51f;
+  font-weight: bold;
+  text-align: right;
+}

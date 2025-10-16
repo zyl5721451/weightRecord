@@ -1,0 +1,56 @@
+<!--list.wxml-->
+<view class="container">
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stats-item">
+      <view class="stats-value">{{total}}</view>
+      <view class="stats-label">总记录数</view>
+    </view>
+    <view class="stats-item">
+      <view class="stats-value">{{records.length > 0 ? records[0].weight + 'kg' : '-'}}</view>
+      <view class="stats-label">最新体重</view>
+    </view>
+  </view>
+  
+  <!-- 记录列表 -->
+  <view class="list-section">
+    <view wx:if="{{records.length === 0}}" class="empty-state">
+      <view class="empty-icon">📋</view>
+      <view class="empty-text">暂无体重记录</view>
+      <view class="empty-tip">快去记录您的体重吧</view>
+    </view>
+    
+    <view wx:else class="record-list">
+      <view 
+        wx:for="{{records}}" 
+        wx:key="id" 
+        class="record-item"
+      >
+        <view class="record-info">
+          <view class="record-date">{{formatDate(item.date)}}</view>
+          <view class="record-week">孕{{item.pregnancyWeek}}周{{item.pregnancyDay}}天</view>
+        </view>
+        <view class="record-weight">{{item.weight}}kg</view>
+        <view 
+          class="delete-btn" 
+          bindtap="deleteRecord" 
+          data-id="{{item.id}}"
+        >
+          删除
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 加载更多 -->
+  <view wx:if="{{hasMore && records.length > 0}}" class="load-more-section">
+    <view class="load-more-btn" bindtap="loadMore">
+      加载更多
+    </view>
+  </view>
+  
+  <!-- 没有更多数据 -->
+  <view wx:if="{{!hasMore && records.length > 0}}" class="no-more-section">
+    <view class="no-more-text">没有更多数据了</view>
+  </view>
+</view>

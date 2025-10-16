@@ -1,0 +1,65 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- 孕周显示 -->
+  <view class="pregnancy-section">
+    <view class="pregnancy-title">当前孕周</view>
+    <view class="pregnancy-week">
+      <text class="week-number">{{pregnancyWeek}}</text>
+      <text class="week-unit">周</text>
+      <text class="day-number">{{pregnancyDay}}</text>
+      <text class="day-unit">天</text>
+    </view>
+  </view>
+  
+  <!-- BMI显示 -->
+  <view wx:if="{{bmi}}" class="bmi-section">
+    <view class="bmi-title">BMI指数</view>
+    <view class="bmi-value">{{bmi}}</view>
+    <view class="bmi-status {{bmiStatus}}">
+      <text wx:if="{{bmiStatus === 'normal'}}">正常</text>
+      <text wx:if="{{bmiStatus === 'underweight'}}">偏瘦</text>
+      <text wx:if="{{bmiStatus === 'overweight'}}">超重</text>
+      <text wx:if="{{bmiStatus === 'obese'}}">肥胖</text>
+    </view>
+    <view class="bmi-stage">{{pregnancyStage}}</view>
+  </view>
+  
+  <!-- 体重显示 -->
+  <view class="weight-section">
+    <view class="weight-title">今日体重</view>
+    <view class="weight-value {{hasRecordToday ? 'has-record' : 'no-record'}}">
+      {{latestWeight ? latestWeight + 'kg' : '未记录'}}
+    </view>
+    <view class="weight-date">{{todayDate}}</view>
+  </view>
+  
+  <!-- 孕期体重增加值 -->
+  <view wx:if="{{weightGain}}" class="weight-gain-section">
+    <view class="gain-title">孕期体重增加值</view>
+    <view class="gain-value {{isOverweight ? 'overweight' : 'normal'}}">
+      {{weightGain}}kg
+      <text wx:if="{{isOverweight}}" class="overweight-warning">⚠️ 超重</text>
+    </view>
+    <view class="gain-recommend">推荐范围: {{recommendedGain}}</view>
+  </view>
+  
+  <!-- 功能按钮 -->
+  <view class="action-section">
+    <view class="action-item" bindtap="goToRecord">
+      <view class="action-icon">📝</view>
+      <view class="action-text">记录体重</view>
+    </view>
+    <view class="action-item" bindtap="goToList">
+      <view class="action-icon">📋</view>
+      <view class="action-text">查看记录</view>
+    </view>
+    <view class="action-item" bindtap="goToChart">
+      <view class="action-icon">📊</view>
+      <view class="action-text">体重曲线</view>
+    </view>
+    <view class="action-item" bindtap="importHistoricalData">
+      <view class="action-icon">📥</view>
+      <view class="action-text">导入历史数据</view>
+    </view>
+  </view>
+</view>

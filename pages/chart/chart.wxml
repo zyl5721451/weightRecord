@@ -1,0 +1,63 @@
+<!--chart.wxml-->
+<view class="container">
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stats-item">
+      <view class="stats-value">{{maxWeight}}</view>
+      <view class="stats-label">最高体重</view>
+    </view>
+    <view class="stats-item">
+      <view class="stats-value">{{minWeight}}</view>
+      <view class="stats-label">最低体重</view>
+    </view>
+    <view class="stats-item">
+      <view class="stats-value">{{avgWeight}}</view>
+      <view class="stats-label">平均体重</view>
+    </view>
+  </view>
+  
+  <!-- 图表区域 -->
+  <view class="chart-section">
+    <view wx:if="{{chartData.length === 0}}" class="empty-state">
+      <view class="empty-icon">📊</view>
+      <view class="empty-text">暂无体重记录</view>
+      <view class="empty-tip">记录体重后即可查看曲线图</view>
+    </view>
+    
+    <view wx:else class="chart-container">
+      <view 
+        class="chart-canvas-wrapper"
+        bindtouchstart="onTouchStart"
+        bindtouchmove="onTouchMove"
+        bindtouchend="onTouchEnd"
+        bindscale="onScale"
+      >
+        <canvas 
+          id="chartCanvas" 
+          type="2d" 
+          class="chart-canvas"
+        ></canvas>
+      </view>
+      <view class="zoom-controls">
+        <button class="zoom-btn" bindtap="resetZoom">重置缩放</button>
+        <text class="zoom-info">缩放: {{scale.toFixed(1)}}x</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 记录列表 -->
+  <view wx:if="{{listData && listData.length > 0}}" class="data-section">
+    <view class="section-title">详细记录</view>
+    <view class="data-list">
+      <view 
+        wx:for="{{listData}}" 
+        wx:key="id" 
+        class="data-item"
+      >
+        <view class="data-date">{{formatDate(item.date)}}</view>
+        <view class="data-week">孕{{item.pregnancyWeek}}周{{item.pregnancyDay}}天</view>
+        <view class="data-weight">{{item.weight}}kg</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,130 @@
+/**record.wxss**/
+.container {
+  padding: 40rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.pregnancy-info {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+}
+
+.pregnancy-text {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #3cc51f;
+  margin-bottom: 15rpx;
+}
+
+.date-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.input-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+}
+
+.input-label {
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.weight-input {
+  border: 2rpx solid #e0e0e0;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  font-size: 36rpx;
+  text-align: center;
+}
+
+.date-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+}
+
+.date-label {
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.date-options {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.date-option {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 10rpx;
+  margin: 0 10rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.date-option.active {
+  background-color: #3cc51f;
+  color: white;
+  border-color: #3cc51f;
+}
+
+.date-picker-section {
+  margin-top: 20rpx;
+}
+
+.date-picker {
+  border: 2rpx solid #e0e0e0;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  text-align: center;
+}
+
+.date-picker-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.save-section {
+  margin: 40rpx 0;
+}
+
+.save-button {
+  background-color: #3cc51f;
+  color: white;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  padding: 25rpx;
+  width: 100%;
+}
+
+.save-button:active {
+  background-color: #34a716;
+}
+
+.settings-section {
+  text-align: center;
+  margin-top: 30rpx;
+}
+
+.settings-button {
+  color: #3cc51f;
+  font-size: 28rpx;
+  text-decoration: underline;
+  padding: 20rpx;
+}
