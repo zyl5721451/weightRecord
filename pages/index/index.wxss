@@ -144,6 +144,12 @@ page {
   color: #999;
 }
 
+.bmi-tip {
+  font-size: 22rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
 /* 体重增加值样式 */
 .weight-gain-section {
   background: white;

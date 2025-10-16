@@ -58,21 +58,21 @@ Page({
   
   // 跳转到记录页面
   goToRecord() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/record/record'
     })
   },
   
   // 跳转到列表页面
   goToList() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/list/list'
     })
   },
   
   // 跳转到图表页面
   goToChart() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/chart/chart'
     })
   },

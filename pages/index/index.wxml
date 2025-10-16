@@ -21,6 +21,7 @@
       <text wx:if="{{bmiStatus === 'overweight'}}">超重</text>
       <text wx:if="{{bmiStatus === 'obese'}}">肥胖</text>
     </view>
+    <view class="bmi-tip">推荐范围：18.5-24</view>
     <view class="bmi-stage">{{pregnancyStage}}</view>
   </view>
   
@@ -56,10 +57,6 @@
     <view class="action-item" bindtap="goToChart">
       <view class="action-icon">📊</view>
       <view class="action-text">体重曲线</view>
-    </view>
-    <view class="action-item" bindtap="importHistoricalData">
-      <view class="action-icon">📥</view>
-      <view class="action-text">导入历史数据</view>
     </view>
   </view>
 </view>

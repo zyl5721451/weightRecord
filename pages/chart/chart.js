@@ -149,7 +149,7 @@ Page({
       ctx.fillText(weight.toFixed(1) + 'kg', margin.left - 10, y + 4)
     }
     
-    // X轴标签 - 支持缩放
+    // X轴标签 - 支持缩放，竖着显示避免拥挤
     const visibleDataCount = Math.min(chartData.length, Math.ceil(chartData.length / scale))
     const step = Math.max(1, Math.floor(chartData.length / visibleDataCount))
     
@@ -161,10 +161,14 @@ Page({
         const date = new Date(chartData[i].date)
         const label = `${date.getMonth() + 1}/${date.getDate()}`
         
+        ctx.save()
         ctx.fillStyle = '#666'
-        ctx.font = '12px sans-serif'
+        ctx.font = '10px sans-serif'
         ctx.textAlign = 'center'
-        ctx.fillText(label, x, margin.top + chartHeight + 20)
+        ctx.translate(x, margin.top + chartHeight + 25)
+        ctx.rotate(-Math.PI / 4) // 斜着显示标签
+        ctx.fillText(label, 0, 0)
+        ctx.restore()
         
         // X轴网格
         ctx.strokeStyle = '#f0f0f0'
