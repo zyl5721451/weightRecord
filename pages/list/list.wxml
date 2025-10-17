@@ -29,6 +29,7 @@
         <view class="record-info">
           <view class="record-date">{{formatDate(item.date)}}</view>
           <view class="record-week">孕{{item.pregnancyWeek}}周{{item.pregnancyDay}}天</view>
+          <view class="record-detail-date">{{formatDetailDate(item.date)}}</view>
         </view>
         <view class="record-weight">{{item.weight}}kg</view>
         <view 

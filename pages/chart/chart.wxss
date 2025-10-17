@@ -12,7 +12,7 @@
   margin-bottom: 30rpx;
   display: flex;
   justify-content: space-around;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
 }
 
 .stats-item {
@@ -36,7 +36,7 @@
   background: white;
   border-radius: 20rpx;
   margin-bottom: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
   min-height: 400rpx;
 }
 
@@ -101,7 +101,7 @@
   background: white;
   border-radius: 20rpx;
   padding: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
@@ -138,6 +138,13 @@
   flex: 1;
   font-size: 26rpx;
   color: #666;
+  text-align: center;
+}
+
+.data-detail-date {
+  flex: 1;
+  font-size: 22rpx;
+  color: #999;
   text-align: center;
 }
 

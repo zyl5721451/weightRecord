@@ -12,7 +12,7 @@
   margin-bottom: 30rpx;
   display: flex;
   justify-content: space-around;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
 }
 
 .stats-item {
@@ -34,7 +34,7 @@
 .list-section {
   background: white;
   border-radius: 20rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
 }
 
 .empty-state {
@@ -87,6 +87,12 @@
 .record-week {
   font-size: 26rpx;
   color: #666;
+  margin-bottom: 4rpx;
+}
+
+.record-detail-date {
+  font-size: 22rpx;
+  color: #999;
 }
 
 .record-weight {

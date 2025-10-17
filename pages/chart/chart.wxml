@@ -56,6 +56,7 @@
       >
         <view class="data-date">{{formatDate(item.date)}}</view>
         <view class="data-week">孕{{item.pregnancyWeek}}周{{item.pregnancyDay}}天</view>
+        <view class="data-detail-date">{{formatDetailDate(item.date)}}</view>
         <view class="data-weight">{{item.weight}}kg</view>
       </view>
     </view>

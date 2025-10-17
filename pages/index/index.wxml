@@ -27,7 +27,7 @@
   
   <!-- 体重显示 -->
   <view class="weight-section">
-    <view class="weight-title">今日体重</view>
+    <view class="weight-title">最新体重</view>
     <view class="weight-value {{hasRecordToday ? 'has-record' : 'no-record'}}">
       {{latestWeight ? latestWeight + 'kg' : '未记录'}}
     </view>

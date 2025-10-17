@@ -15,7 +15,8 @@
     <view class="input-label">体重 (kg)</view>
     <input 
       class="weight-input" 
-      type="digit" 
+      type="text" 
+      inputmode="decimal"
       placeholder="请输入体重" 
       value="{{weight}}"
       bindinput="onWeightInput"
@@ -27,7 +28,8 @@
     <view class="input-label">身高 (cm)</view>
     <input 
       class="height-input" 
-      type="digit" 
+      type="text" 
+      inputmode="decimal"
       placeholder="请输入身高" 
       value="{{height}}"
       bindinput="onHeightInput"
@@ -39,7 +41,8 @@
     <view class="input-label">孕前体重 (kg)</view>
     <input 
       class="pre-pregnancy-input" 
-      type="digit" 
+      type="text" 
+      inputmode="decimal"
       placeholder="请输入孕前体重" 
       value="{{prePregnancyWeight}}"
       bindinput="onPrePregnancyWeightInput"

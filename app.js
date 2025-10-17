@@ -25,10 +25,16 @@ App({
     // 初始化孕周起始日期
     let pregnancyStartDate = wx.getStorageSync('pregnancyStartDate')
     if (!pregnancyStartDate) {
-      // 默认设置为当前日期往前推12周（约3个月）
-      const defaultStartDate = new Date()
-      defaultStartDate.setDate(defaultStartDate.getDate() - 84) // 12周 * 7天
+      // 设置正确的起始日期：2025-06-04
+      const defaultStartDate = new Date('2025-06-04')
       wx.setStorageSync('pregnancyStartDate', defaultStartDate.toISOString().split('T')[0])
+    } else if (pregnancyStartDate === '2025-06-03') {
+      // 如果当前存储的是错误的日期2025-06-03，自动修正为2025-06-04
+      const correctStartDate = new Date('2025-06-04')
+      wx.setStorageSync('pregnancyStartDate', correctStartDate.toISOString().split('T')[0])
+      
+      // 重新计算所有记录的孕周
+      this.recalculateAllPregnancyWeeks()
     }
   },
   
@@ -56,7 +62,7 @@ App({
     const startDate = new Date(startDateStr)
     const currentDate = dateStr ? new Date(dateStr) : new Date()
     
-    // 计算天数差
+    // 计算天数差（不包含起始日）
     const timeDiff = currentDate.getTime() - startDate.getTime()
     const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24))
     
@@ -127,7 +133,34 @@ App({
   // 设置孕周起始日期
   setPregnancyStartDate(dateStr) {
     wx.setStorageSync('pregnancyStartDate', dateStr)
+    
+    // 重新计算所有记录的孕周
+    this.recalculateAllPregnancyWeeks()
+    
     return dateStr
+  },
+  
+  // 重新计算所有记录的孕周
+  recalculateAllPregnancyWeeks() {
+    const records = wx.getStorageSync('weightRecords') || []
+    
+    if (records.length === 0) return
+    
+    // 为每条记录重新计算孕周
+    const updatedRecords = records.map(record => {
+      const weekInfo = this.calculatePregnancyWeek(record.date)
+      
+      return {
+        ...record,
+        pregnancyWeek: weekInfo.weeks,
+        pregnancyDay: weekInfo.days
+      }
+    })
+    
+    // 保存更新后的记录
+    wx.setStorageSync('weightRecords', updatedRecords)
+    
+    console.log('已重新计算', updatedRecords.length, '条记录的孕周信息')
   },
   
   // 设置身高
@@ -153,9 +186,22 @@ App({
   },
   
   // 计算BMI
-  calculateBMI(weight = null) {
+  calculateBMI(weight = null, dateStr = null) {
     const height = this.getHeight() / 100 // 转换为米
-    const currentWeight = weight || this.getLatestWeight()
+    
+    // 获取指定日期或最新记录的体重
+    let currentWeight = weight
+    if (!currentWeight) {
+      if (dateStr) {
+        // 查找指定日期的记录
+        const records = wx.getStorageSync('weightRecords') || []
+        const recordForDate = records.find(record => record.date === dateStr)
+        currentWeight = recordForDate ? parseFloat(recordForDate.weight) : null
+      } else {
+        // 获取最新体重
+        currentWeight = this.getLatestWeight()
+      }
+    }
     
     if (!currentWeight) return null
     
@@ -174,13 +220,24 @@ App({
   },
   
   // 计算孕期体重增加值
-  calculateWeightGain() {
+  calculateWeightGain(dateStr = null) {
     const prePregnancyWeight = this.getPrePregnancyWeight()
-    const latestWeight = this.getLatestWeight()
     
-    if (!latestWeight) return null
+    // 获取指定日期或最新记录的体重
+    let currentWeight = null
+    if (dateStr) {
+      // 查找指定日期的记录
+      const records = wx.getStorageSync('weightRecords') || []
+      const recordForDate = records.find(record => record.date === dateStr)
+      currentWeight = recordForDate ? parseFloat(recordForDate.weight) : null
+    } else {
+      // 获取最新体重
+      currentWeight = this.getLatestWeight()
+    }
     
-    const weightGain = latestWeight - prePregnancyWeight
+    if (!currentWeight) return null
+    
+    const weightGain = currentWeight - prePregnancyWeight
     return weightGain.toFixed(1)
   },
   

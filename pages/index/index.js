@@ -24,29 +24,31 @@ Page({
   
   loadData() {
     const app = getApp()
-    // 计算当前孕周
-    const weekInfo = app.calculatePregnancyWeek()
     
     // 获取最新体重记录
     const records = wx.getStorageSync('weightRecords') || []
-    const today = new Date().toISOString().split('T')[0]
-    const todayRecord = records.find(record => record.date === today)
-    const latestWeight = todayRecord ? todayRecord.weight : (records.length > 0 ? records[0].weight : null)
+    
+    // 按日期排序，获取最新的一条记录
+    const sortedRecords = [...records].sort((a, b) => new Date(b.date) - new Date(a.date))
+    const latestRecord = sortedRecords.length > 0 ? sortedRecords[0] : null
+    
+    // 计算当前日期的孕周（首页应该显示基于当前日期的孕周）
+    const weekInfo = app.calculatePregnancyWeek()
     
     // 计算BMI和体重增加值
-    const bmi = app.calculateBMI(latestWeight)
+    const bmi = app.calculateBMI(latestRecord ? latestRecord.weight : null, latestRecord ? latestRecord.date : null)
     const bmiStatus = app.getBMIStatus(bmi)
     const pregnancyStage = app.getPregnancyStage(weekInfo.weeks)
-    const weightGain = app.calculateWeightGain()
+    const weightGain = app.calculateWeightGain(latestRecord ? latestRecord.date : null)
     const recommendedGain = app.getRecommendedWeightGain(bmiStatus, pregnancyStage)
     const isOverweight = weightGain && parseFloat(weightGain) > 20
     
     this.setData({
       pregnancyWeek: weekInfo.weeks,
       pregnancyDay: weekInfo.days,
-      latestWeight: latestWeight,
-      hasRecordToday: !!todayRecord,
-      todayDate: today,
+      latestWeight: latestRecord ? latestRecord.weight : null,
+      hasRecordToday: latestRecord ? latestRecord.date === new Date().toISOString().split('T')[0] : false,
+      todayDate: latestRecord ? latestRecord.date : new Date().toISOString().split('T')[0],
       bmi: bmi,
       bmiStatus: bmiStatus,
       pregnancyStage: pregnancyStage,
