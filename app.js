@@ -10,8 +10,10 @@ App({
     // 初始化孕前体重数据
     this.initPrePregnancyWeightData()
     
-    // 检查是否需要导入历史数据
-    this.checkAndImportHistoricalData()
+    // 优先尝试导入 JSON 数据（不再自动导入内置历史数据）
+    
+    // 导入 JSON 数据文件
+    this.checkAndImportDataTxt()
   },
   
   // 初始化体重记录数据
@@ -22,19 +24,26 @@ App({
       wx.setStorageSync('weightRecords', weightRecords)
     }
     
-    // 初始化孕周起始日期
+    // 初始化或校正孕周起始日期（优先基于现有记录推导）
     let pregnancyStartDate = wx.getStorageSync('pregnancyStartDate')
+    const derivedStartDate = this.derivePregnancyStartDateFromRecords()
     if (!pregnancyStartDate) {
-      // 设置正确的起始日期：2025-06-04
-      const defaultStartDate = new Date('2025-06-04')
-      wx.setStorageSync('pregnancyStartDate', defaultStartDate.toISOString().split('T')[0])
-    } else if (pregnancyStartDate === '2025-06-03') {
-      // 如果当前存储的是错误的日期2025-06-03，自动修正为2025-06-04
-      const correctStartDate = new Date('2025-06-04')
-      wx.setStorageSync('pregnancyStartDate', correctStartDate.toISOString().split('T')[0])
-      
-      // 重新计算所有记录的孕周
-      this.recalculateAllPregnancyWeeks()
+      if (derivedStartDate) {
+        wx.setStorageSync('pregnancyStartDate', derivedStartDate)
+        this.recalculateAllPregnancyWeeks()
+      } else {
+        const defaultStartDate = new Date('2025-06-04')
+        wx.setStorageSync('pregnancyStartDate', defaultStartDate.toISOString().split('T')[0])
+      }
+    } else {
+      if (derivedStartDate && pregnancyStartDate !== derivedStartDate) {
+        wx.setStorageSync('pregnancyStartDate', derivedStartDate)
+        this.recalculateAllPregnancyWeeks()
+      } else if (pregnancyStartDate === '2025-06-03') {
+        const correctStartDate = new Date('2025-06-04')
+        wx.setStorageSync('pregnancyStartDate', correctStartDate.toISOString().split('T')[0])
+        this.recalculateAllPregnancyWeeks()
+      }
     }
   },
   
@@ -161,6 +170,20 @@ App({
     wx.setStorageSync('weightRecords', updatedRecords)
     
     console.log('已重新计算', updatedRecords.length, '条记录的孕周信息')
+  },
+
+  // 基于最早记录推导孕周起始日期（末次月经）
+  derivePregnancyStartDateFromRecords() {
+    const records = wx.getStorageSync('weightRecords') || []
+    if (!records || records.length === 0) return null
+    const earliest = [...records].sort((a, b) => new Date(a.date) - new Date(b.date))[0]
+    if (!earliest || typeof earliest.pregnancyWeek !== 'number' || typeof earliest.pregnancyDay !== 'number') {
+      return null
+    }
+    const daysFromStart = earliest.pregnancyWeek * 7 + earliest.pregnancyDay
+    const earliestDate = new Date(earliest.date)
+    const startDate = new Date(earliestDate.getTime() - daysFromStart * 24 * 3600 * 1000)
+    return startDate.toISOString().split('T')[0]
   },
   
   // 设置身高
@@ -383,6 +406,191 @@ App({
     }
     
     return startDate
+  },
+  
+  // 从data.txt导入最新数据（已废弃，仅保留调用以兼容旧脚本）
+  importDataFromTxt() {
+    console.warn('importDataFromTxt 已废弃，已改为仅支持 JSON。改为调用 importDataFromFiles()')
+    return this.importDataFromFiles()
+  },
+  
+  // 在小程序启动时检查并导入 JSON 数据
+  checkAndImportDataTxt() {
+    try {
+      const localRecords = wx.getStorageSync('weightRecords') || []
+      let jsonData = null
+      let jsonRecords = []
+
+      // 仅通过 require 读取打包内的数据模块，避免触发文件系统权限问题
+      try {
+        jsonData = require('./data/weightRecords.js')
+        console.log('[JSON] require js ok: ./data/weightRecords.js')
+      } catch (e1) {}
+      if (!jsonData) {
+        try {
+          jsonData = require('data/weightRecords.js')
+          console.log('[JSON] require js ok: data/weightRecords.js')
+        } catch (e2) {}
+      }
+      if (!jsonData) {
+        try {
+          jsonData = require('./data/weightRecords.json')
+          console.log('[JSON] require json ok: ./data/weightRecords.json')
+        } catch (e3) {}
+      }
+      if (!jsonData) {
+        try {
+          jsonData = require('data/weightRecords.json')
+          console.log('[JSON] require json ok: data/weightRecords.json')
+        } catch (e4) {}
+      }
+
+      if (!jsonData) {
+        if (localRecords.length === 0) {
+          console.warn('[JSON] 未能通过 require 读取数据模块，且本地为空，跳过导入')
+        } else {
+          console.warn('[JSON] 未能通过 require 读取数据模块，保留本地数据')
+        }
+        return false
+      }
+
+      jsonRecords = Array.isArray(jsonData) ? jsonData : (jsonData.records || [])
+
+      // 策略：
+      // - 本地为空：导入 JSON
+      // - 本地不为空：比较本地最新日期与 JSON 最新日期，JSON 更新更晚则导入，否则跳过
+      const localLatest = this.getLatestRecordDate(localRecords)
+      const jsonLatest = this.getLatestRecordDate(jsonRecords)
+
+      if (localRecords.length === 0) {
+        console.log('本地记录为空，导入 JSON 数据')
+        this.importDataFromFiles()
+        return true
+      }
+
+      if (jsonLatest && (!localLatest || new Date(jsonLatest) > new Date(localLatest))) {
+        console.log('检测到 JSON 最新日期更晚，导入 JSON 覆盖本地数据')
+        this.importDataFromFiles()
+        return true
+      } else {
+        console.log('本地数据最新或与 JSON 相同，保留本地数据，跳过导入')
+        return false
+      }
+    } catch (error) {
+      console.error('导入 JSON 数据时出现异常:', error)
+      return false
+    }
+  },
+
+  // 获取记录中的最新日期（YYYY-MM-DD），若无返回null
+  getLatestRecordDate(records) {
+    if (!Array.isArray(records) || records.length === 0) return null
+    let latest = null
+    for (const r of records) {
+      const d = r && r.date
+      if (!d) continue
+      const t = new Date(d).getTime()
+      if (!isNaN(t)) {
+        if (latest === null || t > new Date(latest).getTime()) {
+          latest = d
+        }
+      }
+    }
+    return latest
+  },
+
+  // 导入数据文件（仅 JSON）
+  importDataFromFiles() {
+    const fs = wx.getFileSystemManager()
+    let importedRecords = []
+    let pregnancyStartDateFromFile = null
+
+    // 1) 优先使用 require 加载 JS 数据模块，其次 JSON，最后兜底 FS
+    let jsonData = null
+    try {
+      jsonData = require('./data/weightRecords.js')
+      console.log('[Import] require js ok: ./data/weightRecords.js')
+    } catch (e1) {}
+    if (!jsonData) {
+      try {
+        jsonData = require('data/weightRecords.js')
+        console.log('[Import] require js ok: data/weightRecords.js')
+      } catch (e2) {}
+    }
+    if (!jsonData) {
+      try {
+        jsonData = require('./data/weightRecords.json')
+        console.log('[Import] require json ok: ./data/weightRecords.json')
+      } catch (e3) {}
+    }
+    if (!jsonData) {
+      try {
+        jsonData = require('data/weightRecords.json')
+        console.log('[Import] require json ok: data/weightRecords.json')
+      } catch (e4) {}
+    }
+    if (!jsonData) {
+      const candidates = ['data/weightRecords.json', './data/weightRecords.json', '/data/weightRecords.json']
+      for (const p of candidates) {
+        try {
+          try {
+            fs.accessSync(p)
+            console.log('[Import] access ok:', p)
+          } catch (accessErr) {
+            console.warn('[Import] access failed:', p, accessErr && accessErr.errMsg ? accessErr.errMsg : accessErr)
+          }
+          const s = fs.readFileSync(p, 'utf8')
+          console.log('[Import] read ok:', p, 'len=', (s || '').length)
+          jsonData = JSON.parse(s)
+          console.log('[Import] parse ok from fs:', p)
+          break
+        } catch (readErr) {
+          console.error('[Import] fs read/parse failed:', p, readErr && readErr.errMsg ? readErr.errMsg : readErr)
+        }
+      }
+    }
+
+    if (!jsonData) {
+      console.warn('未找到 data/weightRecords.json，跳过导入')
+      return 0
+    }
+
+    const list = Array.isArray(jsonData) ? jsonData : (jsonData.records || [])
+    pregnancyStartDateFromFile = jsonData.pregnancyStartDate || jsonData.startDate || null
+    importedRecords = (list || []).map((item, index) => ({
+      id: Date.now() + index,
+      date: item.date,
+      weight: parseFloat(item.weight),
+      pregnancyWeek: typeof item.pregnancyWeek === 'number' ? item.pregnancyWeek : undefined,
+      pregnancyDay: typeof item.pregnancyDay === 'number' ? item.pregnancyDay : undefined,
+      timestamp: new Date(item.date).getTime()
+    }))
+
+    // 2) 如果没有读取到 JSON，则跳过导入（仅支持 JSON）
+    if (importedRecords.length === 0) {
+      console.warn('未找到 data/weightRecords.json，跳过导入')
+      return 0
+    }
+
+    // 3) 排序并保存
+    importedRecords = importedRecords.filter(r => !!r.date)
+    importedRecords.sort((a, b) => new Date(b.date) - new Date(a.date))
+    wx.setStorageSync('weightRecords', importedRecords)
+
+    // 4) 设置或推导孕周起始日期
+    if (pregnancyStartDateFromFile) {
+      wx.setStorageSync('pregnancyStartDate', pregnancyStartDateFromFile)
+    } else {
+      const derivedStartDate = this.derivePregnancyStartDateFromRecords()
+      if (derivedStartDate) {
+        wx.setStorageSync('pregnancyStartDate', derivedStartDate)
+      }
+    }
+
+    // 5) 重新计算所有记录的孕周
+    this.recalculateAllPregnancyWeeks()
+    console.log('从文件导入数据成功，共导入', importedRecords.length, '条记录')
+    return importedRecords.length
   },
   
   globalData: {

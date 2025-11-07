@@ -42,7 +42,13 @@ Page({
     const chartSortedRecords = [...records].sort((a, b) => new Date(a.date) - new Date(b.date))
     
     // 按日期倒序排序（最新的排前面）- 用于详细记录显示
-    const listSortedRecords = [...records].sort((a, b) => new Date(b.date) - new Date(a.date))
+    const listSortedRecords = [...records]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .map((r) => ({
+        ...r,
+        dateDisplay: this.formatDate(r.date),
+        dateDetailDisplay: this.formatDetailDate(r.date)
+      }))
     
     // 计算统计信息
     const weights = chartSortedRecords.map(record => record.weight)

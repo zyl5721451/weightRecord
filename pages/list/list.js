@@ -19,9 +19,15 @@ Page({
   loadRecords() {
     const app = getApp()
     const result = app.getWeightRecords(this.data.currentPage, this.data.pageSize)
+    // 预计算日期展示字段，避免在 WXML 中调用函数
+    const formattedRecords = (result.records || []).map((r) => ({
+      ...r,
+      dateDisplay: this.formatDate(r.date),
+      dateDetailDisplay: this.formatDetailDate(r.date)
+    }))
     
     this.setData({
-      records: result.records,
+      records: formattedRecords,
       total: result.total,
       hasMore: result.records.length === this.data.pageSize && 
                this.data.currentPage * this.data.pageSize < result.total
@@ -35,9 +41,14 @@ Page({
     const app = getApp()
     const nextPage = this.data.currentPage + 1
     const result = app.getWeightRecords(nextPage, this.data.pageSize)
+    const formattedNext = (result.records || []).map((r) => ({
+      ...r,
+      dateDisplay: this.formatDate(r.date),
+      dateDetailDisplay: this.formatDetailDate(r.date)
+    }))
     
     this.setData({
-      records: [...this.data.records, ...result.records],
+      records: [...this.data.records, ...formattedNext],
       currentPage: nextPage,
       hasMore: result.records.length === this.data.pageSize && 
                nextPage * this.data.pageSize < result.total
