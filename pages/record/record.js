@@ -1,4 +1,5 @@
 // record.js
+const util = require('../../utils/util.js')
 Page({
   data: {
     weight: '',
@@ -17,7 +18,7 @@ Page({
   
   initData() {
     const app = getApp()
-    const today = new Date().toISOString().split('T')[0]
+    const today = util.formatDateYMDLocal(new Date())
     const weekInfo = app.calculatePregnancyWeek()
     
     // 获取身高和孕前体重

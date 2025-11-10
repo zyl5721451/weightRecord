@@ -1,4 +1,5 @@
 // app.js
+const util = require('./utils/util.js')
 App({
   onLaunch() {
     // 初始化体重记录数据
@@ -33,7 +34,7 @@ App({
         this.recalculateAllPregnancyWeeks()
       } else {
         const defaultStartDate = new Date('2025-06-04')
-        wx.setStorageSync('pregnancyStartDate', defaultStartDate.toISOString().split('T')[0])
+        wx.setStorageSync('pregnancyStartDate', util.formatDateYMDLocal(defaultStartDate))
       }
     } else {
       if (derivedStartDate && pregnancyStartDate !== derivedStartDate) {
@@ -41,7 +42,7 @@ App({
         this.recalculateAllPregnancyWeeks()
       } else if (pregnancyStartDate === '2025-06-03') {
         const correctStartDate = new Date('2025-06-04')
-        wx.setStorageSync('pregnancyStartDate', correctStartDate.toISOString().split('T')[0])
+        wx.setStorageSync('pregnancyStartDate', util.formatDateYMDLocal(correctStartDate))
         this.recalculateAllPregnancyWeeks()
       }
     }
@@ -68,8 +69,8 @@ App({
   // 计算孕周和天数
   calculatePregnancyWeek(dateStr = null) {
     const startDateStr = wx.getStorageSync('pregnancyStartDate')
-    const startDate = new Date(startDateStr)
-    const currentDate = dateStr ? new Date(dateStr) : new Date()
+    const startDate = util.parseDateYMDLocal(startDateStr)
+    const currentDate = dateStr ? util.parseDateYMDLocal(dateStr) : new Date()
     
     // 计算天数差（不包含起始日）
     const timeDiff = currentDate.getTime() - startDate.getTime()
@@ -85,8 +86,8 @@ App({
   // 添加体重记录
   addWeightRecord(weight, dateStr = null, pregnancyWeek = null) {
     const records = wx.getStorageSync('weightRecords') || []
-    const currentDate = dateStr ? new Date(dateStr) : new Date()
-    const formattedDate = currentDate.toISOString().split('T')[0]
+    const currentDate = dateStr ? util.parseDateYMDLocal(dateStr) : new Date()
+    const formattedDate = util.formatDateYMDLocal(currentDate)
     
     // 如果未提供孕周，自动计算
     let weekInfo = pregnancyWeek
@@ -176,14 +177,14 @@ App({
   derivePregnancyStartDateFromRecords() {
     const records = wx.getStorageSync('weightRecords') || []
     if (!records || records.length === 0) return null
-    const earliest = [...records].sort((a, b) => new Date(a.date) - new Date(b.date))[0]
+    const earliest = [...records].sort((a, b) => util.parseDateYMDLocal(a.date) - util.parseDateYMDLocal(b.date))[0]
     if (!earliest || typeof earliest.pregnancyWeek !== 'number' || typeof earliest.pregnancyDay !== 'number') {
       return null
     }
     const daysFromStart = earliest.pregnancyWeek * 7 + earliest.pregnancyDay
-    const earliestDate = new Date(earliest.date)
+    const earliestDate = util.parseDateYMDLocal(earliest.date)
     const startDate = new Date(earliestDate.getTime() - daysFromStart * 24 * 3600 * 1000)
-    return startDate.toISOString().split('T')[0]
+    return util.formatDateYMDLocal(startDate)
   },
   
   // 设置身高

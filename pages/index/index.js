@@ -1,4 +1,5 @@
 // index.js
+const util = require('../../utils/util.js')
 Page({
   data: {
     pregnancyWeek: 0,
@@ -47,8 +48,8 @@ Page({
       pregnancyWeek: weekInfo.weeks,
       pregnancyDay: weekInfo.days,
       latestWeight: latestRecord ? latestRecord.weight : null,
-      hasRecordToday: latestRecord ? latestRecord.date === new Date().toISOString().split('T')[0] : false,
-      todayDate: latestRecord ? latestRecord.date : new Date().toISOString().split('T')[0],
+      hasRecordToday: latestRecord ? latestRecord.date === util.formatDateYMDLocal(new Date()) : false,
+      todayDate: latestRecord ? latestRecord.date : util.formatDateYMDLocal(new Date()),
       bmi: bmi,
       bmiStatus: bmiStatus,
       pregnancyStage: pregnancyStage,
